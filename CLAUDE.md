@@ -103,3 +103,12 @@ A안 권장 (단일 시점 데이터 + 조합 12개라 프리렌더가 깔끔). 
 - **API_BASE 단일 지점**: `frontend/src/api.js`만 바꾸면 host/port 전체 전환. 다른 곳에 URL 하드코딩 금지.
 - **`/api/meta`는 정의돼 있지만 프론트가 미사용**: 현재 `BRANDS`가 `shared.jsx`에 하드코딩돼 있어 `/api/meta` 호출이 dead. 운영 전환 시 부트스트랩 단계에서 meta로 교체 고려.
 - **`Tot_Benes`는 67.7% 결측**: 환자 < 11명일 때 CMS가 suppress. 환자수 지표는 보조용으로만.
+
+## Opus 4.8 작업 노트
+
+이 레포는 Claude Opus 4.8(`claude-opus-4-8`)에서 작업한다. 4.8 특성상 프롬프트·기존 코드 작업 시 아래를 의식한다. (출처: [Anthropic Opus 4.8 프롬프팅 가이드](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices))
+
+- **프론트엔드 디자인 house style 충돌 주의 (1순위)**: Opus 4.8은 디자인 지시가 모호하면 크림/오프화이트 배경(`~#F4F1EA`) + serif(Georgia/Fraunces) + 테라코타 액센트로 빠진다. 가이드가 명시적으로 "대시보드·dev tools·fintech·healthcare·enterprise 앱엔 어색하다"고 경고하는데, RxPulse는 정확히 제약/헬스케어 대시보드다. UI 작업 시 이 default로 끌려가지 말고 [`frontend/src/shared.jsx`](frontend/src/shared.jsx)의 `DS`/`BRANDS` 토큰만 SSOT로 쓴다. "깔끔하게"·"미니멀하게" 같은 모호·부정형 지시는 또 다른 고정 팔레트로 옮겨갈 뿐이라 무효 — 토큰 참조로 구체 spec을 준다. (글로벌 SOP: `~/.claude/rules/content-creation.md`)
+- **리터럴 해석**: 4.8은 지시를 문자 그대로 따르고, 한 항목에서 다른 항목으로 암묵 일반화하지 않는다. 콘텐츠·토큰·문자열을 여러 파일에 걸쳐 바꿀 때는 스코프를 명시("모든 섹션/모든 브랜드에 적용")하고, 상위 `Code Changes` 규칙대로 grep으로 잔여 0건을 확인한다.
+- **effort**: 이 코드베이스 작업은 코딩·에이전틱 성격이라 `xhigh`(또는 최소 `high`) 권장. shallow한 결과가 보이면 프롬프트로 우회하지 말고 effort를 올린다.
+- **도구 트리거 / overengineering**: 4.8은 추론을 도구 호출보다 선호하고, 요청 범위를 넘는 추상화·파일 생성 경향이 있다. 이 레포는 빌드 시스템 없는 프로토타입이므로 불필요한 헬퍼·추상화·신규 파일을 만들지 말고 요청된 변경만 한다.
