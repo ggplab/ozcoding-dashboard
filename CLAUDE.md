@@ -1,7 +1,7 @@
 # CLAUDE.md
 
 유형: 건별
-부모: lecture-make
+부모: ozcoding-healthcare-nanodegree (수업 중 진행한 대시보드 실습, 2026-09-23 하위로 이동)
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
